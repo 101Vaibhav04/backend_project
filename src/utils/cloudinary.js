@@ -10,7 +10,7 @@ import fs from 'fs';
     });
 
 
-    const uploaOnCloudinary =  async (localFilePath) =>{
+    const uploadOnCloudinary =  async (localFilePath) =>{
 
       try{
         if(!locaFilePath) return null;
@@ -30,4 +30,4 @@ import fs from 'fs';
 
     }
 
-export {uploaOnCloudinary}
+export {uploadOnCloudinary}

@@ -5,6 +5,8 @@ import {ApiError} from "../utils/ApiError.js"; // Import ApiError for error hand
 
 import { User } from "../models/user.model.js"; // Import User model for database operations
 
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+
 
 const registerUser = asyncHandler(async (req, res) => {
  //get user details from frontend
@@ -41,6 +43,30 @@ const coverImageLocalPath= req.files?.coverImage[0]?.path;
 if(!avatarLocalPath){
   throw new ApiError(400, "Avatar image is required");
 }
+
+// Upload images to Cloudinary
+
+const avatar = await uploadOnCloudinary(avatarLocalPath)
+const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+if(!avatar){
+  throw new ApiError(500, "Failed to upload avatar image");
+} 
+
+const user = await User.create({
+  fullname,
+  email,
+  username: username.toLowerCase(), // Store username in lowercase for consistency
+  password,
+  avatar: avatar.url, // Store the URL of the uploaded image
+  coverImage: coverImage?.url || "", // Store the URL of the uploaded image
+})
+
+ const createdUser  = await User.findById(user._id).select("-password -refreshToken"); // Exclude password and refreshToken from the response
+
+ if(!createdUser) {
+  throw new ApiError(500, "User creation failed")
+ }
+
 
 
 })
