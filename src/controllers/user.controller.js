@@ -7,6 +7,8 @@ import { User } from "../models/user.model.js"; // Import User model for databas
 
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
+import { ApiResponse } from "../utils/ApiResponse.js";
+
 
 const registerUser = asyncHandler(async (req, res) => {
  //get user details from frontend
@@ -67,6 +69,9 @@ const user = await User.create({
   throw new ApiError(500, "User creation failed")
  }
 
+ return res.status(201).json(
+  new ApiResponse(201,createdUser, "User created successfully")
+ );
 
 
 })
