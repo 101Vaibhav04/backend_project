@@ -31,7 +31,7 @@ if(
 }
 
 // Check if user already exists
-const existedUser =  User.findOne({
+const existedUser =  await User.findOne({
   $or: [{username},    {email}]
 })
 
